@@ -43,10 +43,14 @@ for u in urls:
     if not ('STATUS' in d and d['STATUS'] == 'COMPLETED'):
         assert 'SUMMARY' in d
         subject = d['SUMMARY'] + ' tags: imported'
-        print(subject)
-        msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (SMTP_USERNAME,
-                                                             SMTP_USERNAME,
-                                                             subject)
+        if 'DESCRIPTION' in d:
+            body = d['DESCRIPTION']
+        else:
+            body = ''
+        msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s" % (SMTP_USERNAME,
+                                                               SMTP_USERNAME,
+                                                               subject,
+                                                               body)
         server = smtplib.SMTP_SSL(SMTP_SERVER)
         server.login(SMTP_USERNAME, SMTP_PASSWORD)
         server.sendmail(SMTP_USERNAME, SMTP_USERNAME, msg)
