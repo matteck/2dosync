@@ -14,12 +14,13 @@ config = configparser.ConfigParser()
 config.read("2dosync.ini")
 USERNAME = config['icloud']['username']
 PASSWORD = config['icloud']['password']
+URL = config['icloud']['url']
 
 SMTP_USERNAME = config['smtp']['username']
 SMTP_PASSWORD = config['smtp']['password']
 SMTP_SERVER = config['smtp']['server']
 
-client = caldav.DAVClient("https://p48-caldav.icloud.com/110849164/calendars/",
+client = caldav.DAVClient(url=URL,
                           username=USERNAME,
                           password=PASSWORD)
 principal = client.principal()
