@@ -9,6 +9,9 @@ import caldav
 import requests
 import smtplib
 import configparser
+import pprint
+
+duekey="DUE;TZID=Australia/Sydney"
 
 config = configparser.ConfigParser()
 config.read("2dosync.ini")
@@ -39,13 +42,29 @@ for u in urls:
     lines = [x.strip() for x in r.text.strip().split('\n')]
     vals = [x.split(':', 1) for x in lines]
     d = {key: value for (key, value) in vals}
+    if "TRIGGER;VALUE=DATE-TIME" in d:
+        due = "due(%s)" % d['TRIGGER;VALUE=DATE-TIME']
+    else:
+        due = ""
+    if "PRIORITY" in d:
+        p = int(d["PRIORITY"])
+        if p <= 1:
+            priority = "priority(!!!)"
+        elif p <= 5:
+            priority = "priority(!!)"
+        else:
+            priority = "priority(!)"
+    else:
+        priority = ""
     # Don't import completed
     if not ('STATUS' in d and d['STATUS'] == 'COMPLETED'):
         assert 'SUMMARY' in d
-        subject = d['SUMMARY'] + ' tags: imported'
+        subject = "%s tag(%s) %s %s" % (d['SUMMARY'], 'imported', priority, "due(%s)" % d[duekey] if duekey in d else '')
         if 'DESCRIPTION' in d:
             body = d['DESCRIPTION']
         else:
+            body = ''
+        if body == "Reminder":
             body = ''
         msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s" % (SMTP_USERNAME,
                                                                SMTP_USERNAME,
