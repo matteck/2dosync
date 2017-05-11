@@ -10,6 +10,7 @@ import requests
 import smtplib
 import configparser
 import datetime
+import sys
 
 config = configparser.ConfigParser()
 config.read("2dosync.ini")
@@ -48,11 +49,9 @@ for u in urls:
     # Due date
     if "DUE;TZID=Australia/Sydney" in d:
         raw = d["DUE;TZID=Australia/Sydney"]
-        due = "due(%s-%s-%s %s:%s)" % (raw[0:5], raw[])
-
+        due = "due(%s-%s-%s %s:%s)" % (raw[0:4], raw[4:6], raw[6:8], raw[9:11], raw[11:13])
     else:
         due = "due(%s)" % datetime.datetime.now().isoformat()[0:10]
-    print(due)
     # Priority
     if "PRIORITY" in d:
         p = int(d["PRIORITY"])
@@ -80,4 +79,4 @@ for u in urls:
     server.login(SMTP_USERNAME, SMTP_PASSWORD)
     server.sendmail(SMTP_USERNAME, SMTP_USERNAME, msg)
     server.quit()
-    # client.delete(u)
+    client.delete(u)
