@@ -3,7 +3,6 @@
 """
 Synchronise from iCloud Reminders to 2Do via 2Do email integration
 TO-DO: escape quotes in description and notes
-TO-DO: use labels
 TO-DO: add notes
 """
 
@@ -80,7 +79,7 @@ for u in urls:
     else:
         body = ''
 
-    data = {"token": TODOIST_API_KEY, "commands": '[{"type": "item_add", "uuid": "%s", "temp_id": "%s", "args": {"content": "%s",  "priority": "%s", "date_string": "%s"}}]' % (uuid.uuid4(), uuid.uuid4(), d['SUMMARY'], priority, datestring)}
+    data = {"token": TODOIST_API_KEY, "commands": '[{"type": "item_add", "uuid": "%s", "temp_id": "%s", "args": {"content": "%s",  "priority": "%s", "date_string": "%s", "labels": [2147964283]}}]' % (uuid.uuid4(), uuid.uuid4(), d['SUMMARY'], priority, datestring)}
 
     print(json.dumps(data, sort_keys=True, indent=4))
 
