@@ -81,19 +81,5 @@ for u in urls:
 
     data = {"token": TODOIST_API_KEY, "commands": '[{"type": "item_add", "uuid": "%s", "temp_id": "%s", "args": {"content": "%s",  "priority": "%s", "date_string": "%s", "labels": [2147964283]}}]' % (uuid.uuid4(), uuid.uuid4(), d['SUMMARY'], priority, datestring)}
 
-    print(json.dumps(data, sort_keys=True, indent=4))
-
     s = requests.post(TODOIST_API_URL, data=data)
-    print(s.status_code)
-    print(json.dumps(s.json(), sort_keys=True, indent=4))
-
-    # subject = "%s %s %s %s" % (d['SUMMARY'], tags, priority, due)
-    # msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s" % (SMTP_USERNAME,
-    #                                                         SMTP_USERNAME,
-    #                                                         subject,
-    #                                                         body)
-    # server = smtplib.SMTP_SSL(SMTP_SERVER)
-    # server.login(SMTP_USERNAME, SMTP_PASSWORD)
-    # server.sendmail(SMTP_USERNAME, SMTP_USERNAME, msg)
-    # server.quit()
-    # client.delete(u)
+    client.delete(u)
